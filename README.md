@@ -1,7 +1,7 @@
 # luke.htb
 ### Write up for the luke machine on hackthebox.eu.
 
-Two things hindered my process on this box. The first was that my directory enumeration was incomplete. The second was my inexperience with using api's/node.js. I learned a lot from this box, and enjoyed working through it very much.
+Two things hindered my process on this box. The first was that my directory enumeration was incomplete. The second was my inexperience with using node.js express framework. I learned a lot from this box, and enjoyed working through it very much.
 
 ### Scan and Basic Recon
 
