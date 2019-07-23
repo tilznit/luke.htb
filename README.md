@@ -98,8 +98,6 @@ My dirb-ing/nikto had not finished yet, so at this point I manually looked for t
 
 ### dirb and nikto Results
 
-dirb results for 10.10.10.137:80:
-
 ```
 dirb http://10.10.10.137:80
 
@@ -119,9 +117,7 @@ GENERATED WORDS: 4612
 ==> DIRECTORY: http://10.10.10.137/member/
 ==> DIRECTORY: http://10.10.10.137/vendor/
 ```
-The css and js directories contained no useful info, and the member and vendor directories lead no where. `10.10.10.137/LICENSE` was an MIT license with nothing interesting there. `http://10.10.10.137/management` has a dialog box that asks for a username and password. `admin:admin`, and other common username:password pairs didn't work there. So I'll take note and move on for now.
-
-dirb results for 10.10.10.137:3000:
+The css, js, member, and vendor directories contained no useful info. `10.10.10.137/LICENSE` was an MIT license with nothing interesting there. `http://10.10.10.137/management` has a pop-up form that asks for a username and password. `admin:admin`, and other common username:password pairs didn't work there. So I'll take note of the login point and move on.
 
 ```
 dirb http://10.10.10.137:3000/
@@ -137,9 +133,9 @@ GENERATED WORDS: 4612
 + http://10.10.10.137:3000/users (CODE:200|SIZE:56)
 + http://10.10.10.137:3000/Users (CODE:200|SIZE:56)
 ```
-Visiting the login pages returns `please auth` and visiting the user pages retuens the same mesage that we received earilier on port 3000 `{"success":false,"message":"Auth token is not supplied"}`. We'll have to figure out how to get that token soon. 
+Visiting the login pages returns `please auth` and visiting the user pages returns the same mesage that we received earilier on port 3000 `{"success":false,"message":"Auth token is not supplied"}`. I'll have to figure out how to get that token soon. 
 
-nikto output had more goodies:
+The nikto output had more goodies:
 
 ```
 nikto -host http://10.10.10.137:80
@@ -172,7 +168,7 @@ the site in a different fashion to the MIME type
 + 1 host(s) tested
 ```
 
-The interesting thing here is the presence of `config.php`, `login.php`, and `package.json`. I ran wfuzz looking for more php and json files.
+The interesting thing here is the presence of `config.php`, `login.php`, and `package.json`. I immediately ran a wfuzz in the background looking for more php and json files.
 
 `login.php` presents us with our fourth(!) login point:
 
@@ -185,7 +181,7 @@ $dbHost = 'localhost'; $dbUsername = 'root'; $dbPassword = 'Zk6heYCyv6ZE9Xcg'; $
 mysqli($dbHost, $dbUsername, $dbPassword,$db) or die("Connect failed: %s\n". $conn -> error);
 ```
 
-`root:Zk6heYCyv6ZE9Xcg`. Awesome. I tried that against `10.10.10.137/login.php`, `10.10.10.137/management`, and `10.10.10.137:8000` with no success. I will need to figure out how to pass the creds `10.10.10.137:3000`.
+`root:Zk6heYCyv6ZE9Xcg`. Awesome! I tried that against `10.10.10.137/login.php`, `10.10.10.137/management`, and `10.10.10.137:8000` with no success. I will need to figure out how to pass the creds `10.10.10.137:3000`.
 
 ### curl
 
@@ -295,7 +291,7 @@ Derry:rZ86wwLvx7jUxtch
 Yuri:bet@tester87
 Dory:5y:!xa=ybfe)/QD
 ```
-and I used them against the other three login points. Derry's creds gets us in the door at `10.10.10.137/management`. We see links to three documents:
+and I used them against the other three login points not on port 3000. Derry's creds gets us in the door at `10.10.10.137/management`. We see links to three documents:
 
 -scrnshot-
 
@@ -303,7 +299,7 @@ Following `config.json` we get
 
 ![conf](https://user-images.githubusercontent.com/46615118/61739073-55813c80-ad51-11e9-993c-20af1d9555aa.jpg)
 
-which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on port 8000. Upon logginginto Ajenti, we can click on the "Terminal" link at the bottom of the left menu and get an interactive shell. `whoami` shows us as root, so we can easily `cat` for both root.txt and user.txt in their normal hiding places.
+which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on port 8000. Upon logging into Ajenti, we can click on the "Terminal" link at the bottom of the left menu and get an interactive shell. `whoami` shows us as root, so we can easily `cat` for both user.txt and root.txt in their normal hiding places.
 
 ![fin](https://user-images.githubusercontent.com/46615118/61740005-3683aa00-ad53-11e9-8611-9787ad67ac78.jpg)
 
