@@ -94,7 +94,7 @@ Derry
 
 We see two new users potentially: Chihiro and Derry. I looked at the sources of the pages on ports 80, 3000, and 8000 and nothing stood out as useful.
 
-My gobusting/nikto had not finished yet, so at this point I manually looked for things like robots.txt and entering `admin:admin` as username and passwords to the Ajenti login page. Nothing useful there either.
+My dirb-ing/nikto had not finished yet, so at this point I manually looked for things like robots.txt and entering `admin:admin` as username and passwords to the Ajenti login page. Nothing useful there either.
 
 ### dirb and nikto Results
 
@@ -285,7 +285,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTYzNzU
 
 {"name":"Dory","password":"5y:!xa=ybfe)/QD"}
 ```
-### Gaining Access
+### Gaining Access and Pwn
 
 I now have the following creds:
 
@@ -310,3 +310,8 @@ which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on por
 ~fin!
 
 ### Lessons Learned
+
+- Be patient, it's not a race to the flag. The purpose of these excercises is to learn; not get a badge.
+- I need a better/consistant methodology for enumeration.
+- How bearer tokens JWT work.
+- Learned more cURL, which is always a good thing.
