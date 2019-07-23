@@ -295,4 +295,8 @@ Derry:rZ86wwLvx7jUxtch
 Yuri:bet@tester87
 Dory:5y:!xa=ybfe)/QD
 ```
-let's use them against the other three login points.
+and I used them against the other three login points. Derry's creds gets us in the door at `10.10.10.137/management`. We see links to three documents:
+
+-scrnshot-
+
+
