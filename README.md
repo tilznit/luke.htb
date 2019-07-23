@@ -299,4 +299,12 @@ and I used them against the other three login points. Derry's creds gets us in t
 
 -scrnshot-
 
+Following `config.json` we get
+
+![conf](https://user-images.githubusercontent.com/46615118/61739073-55813c80-ad51-11e9-993c-20af1d9555aa.jpg)
+
+which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on port 8000. Upon logginginto Ajenti, we can click on the "Terminal" link at the bottom of the left menu and get an interactive shell. `whoami` shows us as root, so we can easily `cat` for both root.txt and user.txt in their normal hiding places.
+
+
+
 
