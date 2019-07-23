@@ -78,7 +78,7 @@ Looks like we'll need to figure out how to get and pass an Auth token. On `10.10
 
 Again, something to note and investigate later. I'm really interested in the anonymous FTP login.
 
-I log in anonymously and try to navigate directories. It looks to have only one directory, and within that directory there exists one text file, `for_Chihiro.txt`. The contents of the file reads:
+I log in anonymously and try to navigate directories. It only has one directory, and within that directory there exists one text file, `for_Chihiro.txt`. The contents of the file reads:
 
 ```
 Dear Chihiro !!
@@ -96,7 +96,96 @@ We see two new users potentially: Chihiro and Derry. I looked at the sources of 
 
 My gobusting/nikto had not finished yet, so at this point I manually looked for things like robots.txt and entering `admin:admin` as username and passwords to the Ajenti login page. Nothing useful there either.
 
-### dirb and Nikto Results
+### dirb and nikto Results
+
+dirb results for 10.10.10.137:80:
+
+```
+dirb http://10.10.10.137:80
+
+START_TIME: Mon Jul 22 18:53:47 2019
+URL_BASE: http://10.10.10.137/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+OPTION: Interactive Recursion
+-----------------
+GENERATED WORDS: 4612
+
+---- Scanning URL: http://10.10.10.137/ ----
+==> DIRECTORY: http://10.10.10.137/css/
++ http://10.10.10.137/index.html (CODE:200|SIZE:3138)
+==> DIRECTORY: http://10.10.10.137/js/
++ http://10.10.10.137/LICENSE (CODE:200|SIZE:1093)
++ http://10.10.10.137/management (CODE:401|SIZE:381)
+==> DIRECTORY: http://10.10.10.137/member/
+==> DIRECTORY: http://10.10.10.137/vendor/
+```
+The css and js directories contained no useful info, and the member and vendor directories lead no where. `10.10.10.137/LICENSE` was an MIT license with nothing interesting there. `http://10.10.10.137/management` has a dialog box that asks for a username and password. `admin:admin`, and other common username:password pairs didn't work there. So I'll take note and move on for now.
+
+dirb results for 10.10.10.137:3000:
+
+```
+dirb http://10.10.10.137:3000/
+
+START_TIME: Fri Jul 19 19:01:13 2019
+URL_BASE: http://10.10.10.137:3000/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+-----------------
+GENERATED WORDS: 4612
+---- Scanning URL: http://10.10.10.137:3000/ ----
++ http://10.10.10.137:3000/login (CODE:200|SIZE:13)
++ http://10.10.10.137:3000/Login (CODE:200|SIZE:13)
++ http://10.10.10.137:3000/users (CODE:200|SIZE:56)
++ http://10.10.10.137:3000/Users (CODE:200|SIZE:56)
+```
+Visiting the login pages returns `please auth` and visiting the user pages retuens the same mesage that we received earilier of 10.10.10.137:3000 `{"success":false,"message":"Auth token is not supplied"}`. We'll have to figure out how to get that token soon. 
+
+nikto output had more goodies:
+
+```
+nikto -host http://10.10.10.137:80
+
+- Nikto v2.1.6
+---------------------------------------------------------------------------
++ Target IP: 10.10.10.137
++ Target Hostname: 10.10.10.137
++ Target Port: 80
++ Start Time: 2019-07-19 14:26:26 (GMT-5)
+---------------------------------------------------------------------------
++ Server: Apache/2.4.38 (FreeBSD) PHP/7.3.3
++ The anti-clickjacking X-Frame-Options header is not present.
++ The X-XSS-Protection header is not defined. This header can hint to the user agent to protect against
+some forms of XSS
++ The X-Content-Type-Options header is not set. This could allow the user agent to render the content of
+the site in a different fashion to the MIME type
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ Retrieved x-powered-by header: PHP/7.3.3
++ Allowed HTTP Methods: GET, POST, OPTIONS, HEAD, TRACE
++ OSVDB-877: HTTP TRACE method is active, suggesting the host is vulnerable to XST
++ /config.php: PHP Config file may contain database IDs and passwords.
++ OSVDB-3268: /css/: Directory indexing found.
++ OSVDB-3092: /css/: This might be interesting...
++ /login.php: Admin login page/section found.
++ /package.json: Node.js package file found. It may contain sensitive information.
++ 7862 requests: 0 error(s) and 11 item(s) reported on remote host
++ End Time: 2019-07-19 14:35:17 (GMT-5) (531 seconds)
+---------------------------------------------------------------------------
++ 1 host(s) tested
+```
+
+The interesting thing here is the presence of `config.php`, `login.php`, and `package.json`. I ran wfuzz looking for more php and json files.
+
+`login.php` presents us with our fourth login point:
+
+-scrnshot-
+
+`config.php` had a database username and password:
+
+```
+$dbHost = 'localhost'; $dbUsername = 'root'; $dbPassword = 'Zk6heYCyv6ZE9Xcg'; $db = "login"; $conn = new
+mysqli($dbHost, $dbUsername, $dbPassword,$db) or die("Connect failed: %s\n". $conn -> error);
+```
+
+`root:Zk6heYCyv6ZE9Xcg`. Awesome. I tried that against `10.10.10.137/login.php`, `10.10.10.137/management`, and `10.10.10.137:8000` with zero sucsess. I will need to figure out how to pass it to the pages on `10.10.10.137:3000`.
 
 
 ### Gain Access
