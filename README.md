@@ -305,6 +305,8 @@ Following `config.json` we get
 
 which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on port 8000. Upon logginginto Ajenti, we can click on the "Terminal" link at the bottom of the left menu and get an interactive shell. `whoami` shows us as root, so we can easily `cat` for both root.txt and user.txt in their normal hiding places.
 
+![fin](https://user-images.githubusercontent.com/46615118/61740005-3683aa00-ad53-11e9-8611-9787ad67ac78.jpg)
 
+~fin!
 
-
+### Lessons Learned
