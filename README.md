@@ -1,7 +1,7 @@
 # luke.htb
 ### Write up for the luke machine on hackthebox.eu.
 
-Two things hindered my process on this box. The first is that my enumeration was all over the place, and often incomplete. The second was my inexperience with using api's/node.js. I learned a lot from this box, and enjoyed working through it very much.
+Two things hindered my process on this box. The first was that my directory enumeration was incomplete. The second was my inexperience with using api's/node.js. I learned a lot from this box, and enjoyed working through it very much.
 
 ### Scan and Basic Recon
 
@@ -291,7 +291,7 @@ Derry:rZ86wwLvx7jUxtch
 Yuri:bet@tester87
 Dory:5y:!xa=ybfe)/QD
 ```
-and I used them against the other three login points not on port 3000. Derry's creds gets us in the door at `10.10.10.137/management`. We see links to three documents:
+and I used them against the other login points not on port 3000. Derry's creds gets us in the door at `10.10.10.137/management`. We see links to three documents:
 
 -scrnshot-
 
@@ -311,3 +311,4 @@ which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on por
 - I need a better/consistant methodology for enumeration.
 - How bearer tokens JWT work.
 - Learned more cURL, which is always a good thing.
+- CherryTree can export all nodes as a report to pdf!
