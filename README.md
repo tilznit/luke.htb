@@ -92,7 +92,7 @@ security policies !
 Derry
 ```
 
-We see two new users potentially: Chihiro and Derry. I looked at the sources of the pages on ports 80, 3000, and 8000 and nothing stood out as useful.
+We see two potential users: Chihiro and Derry. I looked at the sources of the pages on ports 80, 3000, and 8000 and nothing stood out as useful.
 
 My dirb-ing/nikto had not finished yet, so at this point I manually looked for things like robots.txt and entering `admin:admin` as username and passwords to the Ajenti login page. Nothing useful there either.
 
