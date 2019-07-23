@@ -295,7 +295,7 @@ and I used them against the other login points not on port 3000. Derry's creds g
 
 -scrnshot-
 
-Following `config.json` we get
+Following the `config.json` link we get
 
 ![conf](https://user-images.githubusercontent.com/46615118/61739073-55813c80-ad51-11e9-993c-20af1d9555aa.jpg)
 
