@@ -1,6 +1,6 @@
 # luke.htb
 ### Write up for the luke machine on hackthebox.eu.
-This was a great box that required a ton of enumeration and quality note taking. Enumeration will lead you to database credentials that have to be slightly tweaked in order to grab a JSON web token. This token will allow you to auth to an node.js express service which, if you've enumerated enough, will give you many credentials to throw at the many login points on this box. A successful login will give you the root creds for the Ajenti service running on port 8000. From there, an interactive shell will lead you to both the user and root flags, no privesc required.
+This box required a ton of enumeration and quality note taking. Enumeration will lead you to database credentials that have to be slightly tweaked in order to grab a JSON web token. This token will allow you to auth to an node.js express service which, if you've enumerated enough, will give you many credentials to throw at the many login points on this box. A successful login will give you the root creds for the Ajenti service running on port 8000. From there, an interactive shell will lead you to both the user and root flags, no privesc required.
 
 ### Scan and Basic Recon
 
