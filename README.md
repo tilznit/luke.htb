@@ -66,7 +66,7 @@ Three http services are listed, one running as node.js express. There is also an
 
 If we go to `10.10.10.137:80` we get a landing page for a site named Luke. 
 
--scrnshot-
+![Screenshot from 2019-07-23 20-32-31 (1)](https://user-images.githubusercontent.com/46615118/61758869-0f959a00-ad8c-11e9-835a-1ce170b0fc1d.jpg)
 
 This site gives us a potential user and domain name with `contact@luke.io`, which is something to take note of, and move on to investigating `10.10.10.137:3000`. This returns
 
@@ -74,7 +74,7 @@ This site gives us a potential user and domain name with `contact@luke.io`, whic
 
 Looks like we'll need to figure out how to get and pass an Auth token. On `10.10.10.137:8000` we get a login page for the Ajenti server admin tool.
 
--scrnshot-
+![Screenshot from 2019-07-23 20-29-53](https://user-images.githubusercontent.com/46615118/61758870-11f7f400-ad8c-11e9-83cf-2ccd73324e6c.jpg)
 
 Again, something to note and investigate later. I'm really interested in the anonymous FTP login.
 
@@ -172,7 +172,7 @@ The interesting thing here is the presence of `config.php`, `login.php`, and `pa
 
 `login.php` presents us with our fourth(!) login point:
 
--scrnshot-
+![Screenshot from 2019-07-23 20-30-31](https://user-images.githubusercontent.com/46615118/61758872-145a4e00-ad8c-11e9-8335-6d540e92a5d0.jpg)
 
 `config.php` had a database username and password:
 
@@ -293,7 +293,7 @@ Dory:5y:!xa=ybfe)/QD
 ```
 and I used them against the other login points not on port 3000. Derry's creds gets us in the door at `10.10.10.137/management`. We see links to three documents:
 
--scrnshot-
+![Screenshot from 2019-07-23 20-31-31](https://user-images.githubusercontent.com/46615118/61758873-16bca800-ad8c-11e9-8369-3202c6078882.jpg)
 
 Following the `config.json` link we get
 
@@ -312,3 +312,5 @@ which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on por
 - How bearer tokens JWT work.
 - Learned more cURL, which is always a good thing.
 - CherryTree can export all nodes as a report to pdf!
+
+![Screenshot from 2019-07-23 20-32-31](https://user-images.githubusercontent.com/46615118/61758879-1b815c00-ad8c-11e9-8ff7-cc75225be11a.jpg)
