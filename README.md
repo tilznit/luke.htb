@@ -1,7 +1,6 @@
 # luke.htb
 ### Write up for the luke machine on hackthebox.eu.
-
-Two things hindered my process on this box. The first was that my directory enumeration was incomplete. The second was my inexperience with using node.js express framework. I learned a lot from this box, and enjoyed working through it very much.
+This was a great box that required a ton of enumeration and quality note taking. Enumeration will lead you to database credentials that have to be slightly tweaked in order to grab a JSON web token. This token will allow you to auth to an node.js express service which, if you've enumerated enough, will give you many credentials to throw at the many login points on this box. A successful login will give you the root creds for the Ajenti service running on port 8000. From there, an interactive shell will lead you to both the user and root flags, no privesc required.
 
 ### Scan and Basic Recon
 
@@ -289,9 +288,8 @@ which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on por
 
 ### Lessons Learned
 
-- Be patient, it's not a race to the flag. The purpose of these excercises is to learn; not get a badge.
-- I need a better/consistant methodology for enumeration.
-- How bearer tokens JWT work.
-- Learned more cURL, which is always a good thing.
+- Be patient, it's not a race to the flag. The purpose of these excercises is to learn; not to get a badge.
+- I need a better/consistant methodology for enumeration and note taking.
+- I learned how to curl with JWT bearer tokens.
 - CherryTree can export all nodes as a report to pdf!
 
