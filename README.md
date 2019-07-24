@@ -66,7 +66,7 @@ Three http services are listed, one running as node.js express. There is also an
 
 If we go to `10.10.10.137:80` we get a landing page for a site named Luke. 
 
-![Screenshot from 2019-07-23 20-32-31 (1)](https://user-images.githubusercontent.com/46615118/61758869-0f959a00-ad8c-11e9-835a-1ce170b0fc1d.jpg)
+![Screenshot from 2019-07-23 20-29-27](https://user-images.githubusercontent.com/46615118/61759169-30aaba80-ad8d-11e9-9cc7-77e7c377325b.png)
 
 This site gives us a potential user and domain name with `contact@luke.io`, which is something to take note of, and move on to investigating `10.10.10.137:3000`. This returns
 
