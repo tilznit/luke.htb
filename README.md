@@ -180,7 +180,7 @@ $dbHost = 'localhost'; $dbUsername = 'root'; $dbPassword = 'Zk6heYCyv6ZE9Xcg'; $
 mysqli($dbHost, $dbUsername, $dbPassword,$db) or die("Connect failed: %s\n". $conn -> error);
 ```
 
-`root:Zk6heYCyv6ZE9Xcg`. Awesome! I tried that against `10.10.10.137/login.php`, `10.10.10.137/management`, and `10.10.10.137:8000` with no success. I will need to figure out how to pass the creds `10.10.10.137:3000`.
+`root:Zk6heYCyv6ZE9Xcg`. Awesome! I tried that against `10.10.10.137/login.php`, `10.10.10.137/management`, and `10.10.10.137:8000` with no success. I will need to figure out how to pass the creds to `10.10.10.137:3000`.
 
 ### curl
 
