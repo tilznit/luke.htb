@@ -293,7 +293,7 @@ Dory:5y:!xa=ybfe)/QD
 ```
 and I used them against the other login points not on port 3000. Derry's creds gets us in the door at `10.10.10.137/management`. We see links to three documents:
 
-![Screenshot from 2019-07-23 20-31-31](https://user-images.githubusercontent.com/46615118/61758873-16bca800-ad8c-11e9-8369-3202c6078882.jpg)
+![Screenshot from 2019-07-23 20-32-31](https://user-images.githubusercontent.com/46615118/61758879-1b815c00-ad8c-11e9-8ff7-cc75225be11a.jpg)
 
 Following the `config.json` link we get
 
@@ -313,4 +313,3 @@ which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on por
 - Learned more cURL, which is always a good thing.
 - CherryTree can export all nodes as a report to pdf!
 
-![Screenshot from 2019-07-23 20-32-31](https://user-images.githubusercontent.com/46615118/61758879-1b815c00-ad8c-11e9-8ff7-cc75225be11a.jpg)
