@@ -289,7 +289,7 @@ which reveals the root creds `root:KpMasng6S5EtTy9Z` for the Ajenti login on por
 ### Lessons Learned
 
 - Be patient, it's not a race to the flag. The purpose of these excercises is to learn; not to get a badge.
-- I need to develop a better/consistant methodology for enumeration and note taking.
+- Continue to develop a better/consistant methodology for enumeration and note taking.
 - I learned how to curl with JWT bearer tokens.
 - CherryTree can export all nodes as a report to pdf!
 
