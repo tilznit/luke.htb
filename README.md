@@ -120,7 +120,7 @@ GENERATED WORDS: 4612
 ==> DIRECTORY: http://10.10.10.137/member/
 ==> DIRECTORY: http://10.10.10.137/vendor/
 ```
-The css, js, member, and vendor directories contained no useful info. `10.10.10.137/LICENSE` was an MIT license with nothing interesting there. `http://10.10.10.137/management` has a pop-up form that asks for a username and password. I tried `admin:admin`, and other common `username:password` pairs without success. So I'll take note of the login point and move on.
+The css, js, member, and vendor directories contained no useful info. `10.10.10.137/LICENSE` was an MIT license with nothing interesting there. `http://10.10.10.137/management` has a pop-up form that asks for a username and password. I tried `admin:admin`, and other common `username:password` combinations without success. So I'll take note of the login point and move on.
 
 ```
 dirb http://10.10.10.137:3000/
